@@ -10,14 +10,17 @@ SESSION_ID = "123"
 
 llm = ChatOpenAI(model="gpt-4", temperature=0)
 
+# 会話履歴の準備
 history = SQLChatMessageHistory(
     session_id=SESSION_ID,
     connection_string=f"sqlite:///{MEMORY_SQLITE_FILE}",
 )
 memory = ConversationBufferMemory(chat_memory=history)
 
+# chainを作成
 chain = ConversationChain(llm=llm, memory=memory)
 
+# 繰り返し会話を行う
 while True:
     user_message = input("You: ")
     ai_message = chain.run(user_message)
