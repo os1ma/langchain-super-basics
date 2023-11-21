@@ -7,16 +7,16 @@ from langchain.vectorstores.faiss import FAISS
 
 load_dotenv()
 
-# 文書をベクトル化してVector Storeに格納
+# 文書をベクトル化してVector Storeに格納して検索準備
 texts = [
     "私の趣味は読書です。",
     "私の好きな食べ物はカレーです。",
     "私の嫌いな食べ物は饅頭です。",
 ]
 vectorstore = FAISS.from_texts(texts, embedding=OpenAIEmbeddings())
+
 retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 
-# 「検索 => プロンプトの穴埋め => LLMで回答を生成」というchainを作成
 prompt = ChatPromptTemplate.from_template(
     """以下のcontextだけに基づいて回答してください。
 
@@ -26,6 +26,8 @@ prompt = ChatPromptTemplate.from_template(
 """
 )
 llm = ChatOpenAI(model="gpt-4", temperature=0)
+
+# 「検索 => プロンプトの穴埋め => LLMで回答を生成」というchainを作成
 chain = {"context": retriever, "question": RunnablePassthrough()} | prompt | llm
 
 # chainを実行
