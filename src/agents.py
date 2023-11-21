@@ -9,12 +9,9 @@ set_verbose(True)
 
 llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
-# LLMが使えるツールを準備（「ddg-search」はDuckDuckGoという検索エンジン）
 tools = load_tools(["ddg-search"])
 
-# エージェントを初期化
 agent_chain = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS)
 
-# エージェントを実行
 result = agent_chain.run("東京の天気を教えて")
 print(result)
