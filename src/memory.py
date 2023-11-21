@@ -5,15 +5,12 @@ from langchain.memory import ConversationBufferMemory, SQLChatMessageHistory
 
 load_dotenv()
 
-MEMORY_SQLITE_FILE = "memory.sqlite"
-SESSION_ID = "123"
-
 llm = ChatOpenAI(model="gpt-4", temperature=0)
 
 # 会話履歴の準備
 history = SQLChatMessageHistory(
-    session_id=SESSION_ID,
-    connection_string=f"sqlite:///{MEMORY_SQLITE_FILE}",
+    session_id="123",
+    connection_string="sqlite:///memory.sqlite",
 )
 memory = ConversationBufferMemory(chat_memory=history)
 
